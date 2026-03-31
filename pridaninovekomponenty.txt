@@ -1,0 +1,26 @@
+<hr id="formular-sekce">
+
+<div class="card mt-4 mb-5">
+    <div class="card-header bg-light">
+        <h3>Přidat novou komponentu</h3>
+    </div>
+    <div class="card-body">
+    <?= form_open_multipart('ulozit-novou-komponentu'); ?>
+            <div class="mb-3">
+                <label for="nazev" class="form-label">Název:</label>
+                <input type="text" name="nazev" id="nazev" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="typ" class="form-label">Typ:</label>
+                <input type="text" name="typ" id="typ" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="obrazek" class="form-label">Obrázek:</label>
+                <input type="file" name="obrazek" class="form-control" id="logo" accept=".jpg, .png">
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-dark">Přidat novou komponentu</button>
+            </div>
+        <?= form_close(); ?>
+    </div>
+</div>

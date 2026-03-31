@@ -4,7 +4,6 @@ use App\Models\Komponenty;
 <?=$this->extend("layout/template");?>
 <?=$this->section("content");?>
 
-
 <h1>Informace o komponentu</h1>
 <p><b>Název: </b> <?= $komponenty->nazev ?></p>
 <p><b>Výrobce: </b> <?= $komponenty->vyrobce ?></p>
@@ -20,12 +19,7 @@ use App\Models\Komponenty;
 <p><b>Fotka: </b> <?= img($obrazek) ?></p>
 
 <?php 
-$table = new \CodeIgniter\View\Table(); 
-$table->setHeading("Název vlastnosti", "Hodnota"); 
-$butonka ='<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#myModal">Smazat</button>';
-foreach ($parametr as $row){
-    $table->addRow($row->nazev, $row->hodnota, $butonka);
-}
+// --- DEFINICE HELPERU ---
 if (!function_exists('form_modal')) {
     function form_modal($idModal, $idRow, $heading, $message, $route, $type = "danger", $buttonText = "Smazat")
     {
@@ -44,7 +38,7 @@ if (!function_exists('form_modal')) {
         $result .= form_open($route);
         $result .= "<input type=\"hidden\" name=\"_method\" value=\"DELETE\">";
         $result .= "<input type=\"hidden\" name=\"id\" value=\"" . $idRow . "\">";
-        $result .= "<button type=\"submit\" class=\"btn btn-" . $type . "\" data-bs-dismiss=\"modal\">" . $buttonText . "</button>\n";
+        $result .= "<button type=\"submit\" class=\"btn btn-" . $type . "\">" . $buttonText . "</button>\n";
         $result .= "</form>\n";
         $result .= "</div>\n</div>\n</div>\n</div>\n";
 
@@ -52,21 +46,42 @@ if (!function_exists('form_modal')) {
     }
 }
 
+// --- PŘÍPRAVA TABULKY ---
+$table = new \CodeIgniter\View\Table(); 
+$table->setHeading("Název vlastnosti", "Hodnota", "Akce"); 
+
+$allModals = ""; // Sem si budeme ukládat HTML kód modalů, abychom je vypsali až pod tabulkou
+
+foreach ($parametr as $row){
+    // Každý řádek musí mít své unikátní ID modalu (např. modal_22)
+    $currentModalId = "modal_" . $row->idParametr;
+    
+    // Tlačítko smazat pro konkrétní řádek
+    $butonka = '<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#' . $currentModalId . '">Smazat</button>';
+    
+    $table->addRow($row->nazev, $row->hodnota, $butonka);
+
+    // Vygenerování modalu pro tento konkrétní řádek
+    $allModals .= form_modal(
+        $currentModalId, 
+        $row->idParametr, 
+        "Smazat hodnotu", 
+        "Opravdu chcete smazat hodnotu <b>" . $row->hodnota . "</b>?", 
+        "typkomponentu/delete" 
+    );
+}
 
 $template = array(
     'table_open'=> '<table class="table table-bordered">',
     'table_close' => '</table>'
 );
 $table->setTemplate($template);
-echo $table->generate();
-echo form_modal(
-    "myModal", 
-    $komponenty->id, 
-    "Smazat komponent", 
-    "Opravdu to chcete smazat?", 
-    "typkomponentu/delete/" . $komponenty->id 
-);
 
+// VYPSÁNÍ TABULKY
+echo $table->generate();
+
+// VYPSÁNÍ VŠECH MODALŮ (aby byly připravené v kódu stránky)
+echo $allModals;
 ?>
 
 <?=$this->endSection();?>

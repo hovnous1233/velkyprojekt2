@@ -7,10 +7,10 @@ use CodeIgniter\Model;
 class Parametr extends Model
 {
     protected $table            = 'parametr';
-    protected $primaryKey       = 'id';
+    protected $primaryKey       = 'idParametr';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
-    protected $useSoftDeletes   = false;
+    protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [];
 
@@ -21,11 +21,11 @@ class Parametr extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
+    protected $deletedField  = 'smazano';
 
     // Validation
     protected $validationRules      = [];

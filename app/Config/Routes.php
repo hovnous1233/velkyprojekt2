@@ -13,4 +13,4 @@ $routes->get('/', 'Vyrobce::index');
 $routes->post('vyrobce/ulozit', 'Vyrobce::ulozit');
 $routes->get('editace/index/(:num)', 'Editace::index/$1');
 $routes->put('editace/aktualizovat/(:num)', 'Editace::aktualizovat/$1');
-$routes->delete('typkomponentu/delete/(:num)', 'Mazani::smazat/$1');
+$routes->delete('typkomponentu/delete', 'Mazani::smazat');

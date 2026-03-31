@@ -2,18 +2,22 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
+
+use App\Models\Parametr;
+
 
 class Mazani extends BaseController
 {
-    public function smazat($id = null)
+    public function smazat()
     {
-        $db = \Config\Database::connect();
-        $db->transStart();
-        $db->table('parametry')->where('komponenty_id', $id)->delete();
-        $db->table('komponenty')->where('id', $id)->delete();
-        $db->transComplete();
-        return redirect()->to('/')->with('success', 'Komponent byl úspěšně smazán.');
+        $id = $this->request->getPost('id');
+
+        if ($id) {
+            $model = new Parametr();
+
+            $model->delete($id);
+
+            return redirect()->back()->with('success', 'Položka byla úspěšně smazána.');
+        }
     }
 }
