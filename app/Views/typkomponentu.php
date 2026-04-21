@@ -19,7 +19,7 @@ use App\Models\Komponenty;
 <p><b>Fotka: </b> <?= img($obrazek) ?></p>
 
 <?php 
-// --- DEFINICE HELPERU ---
+
 if (!function_exists('form_modal')) {
     function form_modal($idModal, $idRow, $heading, $message, $route, $type = "danger", $buttonText = "Smazat")
     {
@@ -46,23 +46,17 @@ if (!function_exists('form_modal')) {
     }
 }
 
-// --- PŘÍPRAVA TABULKY ---
 $table = new \CodeIgniter\View\Table(); 
 $table->setHeading("Název vlastnosti", "Hodnota", "Akce"); 
 
-$allModals = ""; // Sem si budeme ukládat HTML kód modalů, abychom je vypsali až pod tabulkou
 
 foreach ($parametr as $row){
-    // Každý řádek musí mít své unikátní ID modalu (např. modal_22)
     $currentModalId = "modal_" . $row->idParametr;
-    
-    // Tlačítko smazat pro konkrétní řádek
     $butonka = '<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#' . $currentModalId . '">Smazat</button>';
     
     $table->addRow($row->nazev, $row->hodnota, $butonka);
 
-    // Vygenerování modalu pro tento konkrétní řádek
-    $allModals .= form_modal(
+    $modaly .= form_modal(
         $currentModalId, 
         $row->idParametr, 
         "Smazat hodnotu", 
@@ -76,12 +70,8 @@ $template = array(
     'table_close' => '</table>'
 );
 $table->setTemplate($template);
-
-// VYPSÁNÍ TABULKY
 echo $table->generate();
-
-// VYPSÁNÍ VŠECH MODALŮ (aby byly připravené v kódu stránky)
-echo $allModals;
+echo $modaly;
 ?>
 
 <?=$this->endSection();?>
