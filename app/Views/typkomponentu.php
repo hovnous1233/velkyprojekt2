@@ -19,6 +19,33 @@ use App\Models\Komponenty;
 <p><b>Fotka: </b> <?= img($obrazek) ?></p>
 
 <?php 
+$table = new \CodeIgniter\View\Table(); 
+$table->setHeading("Název vlastnosti", "Hodnota", "Akce"); 
+
+$template = array(
+    'table_open'=> '<table class="table table-bordered">',
+    'thead_open'=> '<thead>',
+    'thead_close'=> '</thead>',
+    'heading_row_start'=> '<tr>',
+    'heading_row_end'=>' </tr>',
+    'heading_cell_start'=> '<th>',
+    'heading_cell_end' => '</th>',
+    'tbody_open' => '<tbody>',
+    'tbody_close' => '</tbody>',
+    'row_start' => '<tr>',
+    'row_end'  => '</tr>',
+    'cell_start' => '<td>',
+    'cell_end' => '</td>',
+    'row_alt_start' => '<tr>',
+    'row_alt_end' => '</tr>',
+    'cell_alt_start' => '<td>',
+    'cell_alt_end' => '</td>',
+    'table_close' => '</table>'
+    );
+    
+    $table->setTemplate($template);
+    
+
 
 if (!function_exists('form_modal')) {
     function form_modal($idModal, $idRow, $heading, $message, $route, $type = "danger", $buttonText = "Smazat")
@@ -46,18 +73,17 @@ if (!function_exists('form_modal')) {
     }
 }
 
-$table = new \CodeIgniter\View\Table(); 
-$table->setHeading("Název vlastnosti", "Hodnota", "Akce"); 
 
+$modaly = "";
 
 foreach ($parametr as $row){
-    $currentModalId = "modal_" . $row->idParametr;
-    $butonka = '<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#' . $currentModalId . '">Smazat</button>';
+    $ModalId= "modal_" . $row->idParametr;
+    $butonka = '<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#' . $ModalId . '">Smazat</button>';
     
     $table->addRow($row->nazev, $row->hodnota, $butonka);
 
     $modaly .= form_modal(
-        $currentModalId, 
+        $ModalId, 
         $row->idParametr, 
         "Smazat hodnotu", 
         "Opravdu chcete smazat hodnotu <b>" . $row->hodnota . "</b>?", 
@@ -65,11 +91,6 @@ foreach ($parametr as $row){
     );
 }
 
-$template = array(
-    'table_open'=> '<table class="table table-bordered">',
-    'table_close' => '</table>'
-);
-$table->setTemplate($template);
 echo $table->generate();
 echo $modaly;
 ?>

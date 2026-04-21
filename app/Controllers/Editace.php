@@ -20,7 +20,7 @@ class Editace extends BaseController
     }
 
 
-    public function aktualizovat($id)
+    /*public function aktualizovat($id)
     {
         $pridani = new PridaniVyrobce();
 
@@ -38,4 +38,4 @@ class Editace extends BaseController
         
         return redirect()->to(base_url('/'));
     }
-}
+*/}
